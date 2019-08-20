@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	ros::Publisher range_pub = nh_priv.advertise<sensor_msgs::Range>("range", 20);
 
 	// Read parameters
-	int mode, i2c_bus, i2c_address;
+	int mode, i2c_bus, i2c_address, do_reset;
 	double poll_rate, timing_budget, offset;
 	nh_priv.param("mode", mode, 3);
 	nh_priv.param("i2c_bus", i2c_bus, 1);
@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 	nh_priv.param("field_of_view", range.field_of_view, 0.471239f); // 27 deg, source: datasheet
 	nh_priv.param("min_range", range.min_range, 0.0f);
 	nh_priv.param("max_range", range.max_range, 4.0f);
+	nh_priv.param("reset", do_reset, 1);
 
 	if (timing_budget < 0.02 || timing_budget > 1) {
 		ROS_FATAL("Error: timing_budget should be within 0.02 and 1 s (%g is set)", timing_budget);
@@ -57,8 +58,10 @@ int main(int argc, char **argv)
 	// Init sensor
 	VL53L1_Dev_t dev;
 	VL53L1_Error dev_error;
-	VL53L1_software_reset(&dev);
-	VL53L1_WaitDeviceBooted(&dev);
+	if(do_reset) {
+		VL53L1_software_reset(&dev);
+		VL53L1_WaitDeviceBooted(&dev);
+	}
 	VL53L1_DataInit(&dev);
 	VL53L1_StaticInit(&dev);
 	VL53L1_PerformRefSpadManagement(&dev);
