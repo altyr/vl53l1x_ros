@@ -60,6 +60,7 @@ All parameters are optional. Check the [`launch`](https://github.com/okalachev/v
 * `~field_of_view` (*float*) – field of view for output `Range` messages, *rad* (default: 0.471239).
 * `~min_range` (*float*) – minimum range for output `Range` messages, *m* (default: 0.0).
 * `~max_range` (*float*) – maximum range for `Range` output messages, *m* (default: 4.0).
+* `~reset` (*int*) - reset the sensor before using it, 1 = reset, 0 = no reset (default: 1).
 
 `timing_budget` is the time VL53L1X uses for ranging. The larger this time, the more accurate is measument and the larger is maximum distance. Timing budget can be set from *0.02 s* up to *1 s*.
 
