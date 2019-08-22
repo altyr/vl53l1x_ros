@@ -64,6 +64,10 @@
 #ifndef _VL53L1_PLATFORM_H_
 #define _VL53L1_PLATFORM_H_
 
+#ifndef USE_I2C_2V8                                                            
+#define USE_I2C_2V8
+#endif
+
 #include "vl53l1_ll_def.h"
 #include "vl53l1_platform_log.h"
 
