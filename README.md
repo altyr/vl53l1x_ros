@@ -55,14 +55,17 @@ All parameters are optional. Check the [`launch`](https://github.com/okalachev/v
 * `~mode` (*int*) – distance mode, 1 = short, 2 = medium, 3 = long (default: 3).
 * `~timing_budget` (*double*) – timing budget for measurements, *s* (default: 0.1)
 * `~poll_rate` (*double*) – polling data rate, *Hz* (default: 100).
+* `~ignore_range_status` (*bool*) – ignore validness of measurements (default: false).
+* `~min_signal` (*double*) – minimum amplitude of the signal reflected from the target to be considered valid, *MCPS* (default: 1).
+* `~max_sigma` (*double*) – maximum standard deviation of the measurement to be considered valid, *m* (default: 0.015).
 * `~offset` (*float*) – offset to be automatically added to measurement value, *m* (default: 0.0).
-* `~frame_id` (*string*) – frame id for output `Range` messages (deafult: "").
+* `~frame_id` (*string*) – frame id for output `Range` messages (default: "").
 * `~field_of_view` (*float*) – field of view for output `Range` messages, *rad* (default: 0.471239).
 * `~min_range` (*float*) – minimum range for output `Range` messages, *m* (default: 0.0).
 * `~max_range` (*float*) – maximum range for `Range` output messages, *m* (default: 4.0).
 * `~reset` (*int*) - reset the sensor before using it, 1 = reset, 0 = no reset (default: 1).
 
-`timing_budget` is the time VL53L1X uses for ranging. The larger this time, the more accurate is measument and the larger is maximum distance. Timing budget can be set from *0.02 s* up to *1 s*.
+`timing_budget` is the time VL53L1X uses for ranging. The larger this time, the more accurate is measurement and the larger is maximum distance. Timing budget can be set from *0.02 s* up to *1 s*.
 
 * *0.02 s* is the minimum timing budget and can be used only in *Short* distance mode.
 * *0.033 s* is the minimum timing budget which can work for all distance modes.
@@ -70,7 +73,11 @@ All parameters are optional. Check the [`launch`](https://github.com/okalachev/v
 
 The resulting measurement rate is *1 / (timing budget + 0.004) Hz*.
 
-`mode` is one of three distance modes, with the timing budget of *0.1 s*, *Short*, *Medimum* and *Long* modes have maximum distances of 136, 290, and 360 cm, respectively.
+Setting `ignore_range_status` to `true` makes the node to ignore `RangeStatus` field of measurements. This may significantly improve maximum distance and rate but affects quality of measurements.
+
+`mode` is one of three distance modes, with the timing budget of *0.1 s*, *Short*, *Medium* and *Long* modes have maximum distances of 136, 290, and 360 cm, respectively.
+
+`~min_range` and `~max_range` don't affect any device settings and only define `min_range` and `max_range` values of the output [`Range`](http://docs.ros.org/melodic/api/sensor_msgs/html/msg/Range.html) messages.
 
 See the [official documentation](https://www.st.com/resource/en/datasheet/vl53l1x.pdf) for more information on mode and timing budget.
 
@@ -79,6 +86,7 @@ See the [official documentation](https://www.st.com/resource/en/datasheet/vl53l1
 ### Published
 
 * `~range` ([*sensor_msgs/Range*](http://docs.ros.org/kinetic/api/sensor_msgs/html/msg/Range.html)) – resulting measurement.
+* `~data` ([*vl53l1x/MeasurementData*](https://github.com/okalachev/vl53l1x_ros/blob/master/vl53l1x/msg/MeasurementData.msg)) – additional data of the measurement.
 
 ## Copyright
 
